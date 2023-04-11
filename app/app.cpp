@@ -1,6 +1,8 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
+#include <stdbool.h>
+
 
 #include <windows.h>
 
@@ -74,27 +76,33 @@ void main() {
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(console, WH_FOREGROUNDIDLE);
 
-	int arr[100][100], i, j;
-
-
-
-	printf("Hi {User_name}, input i and j:  \n");
-
+	struct students{   
+		char name[255];           
+		char lastName[255];
+		int age;
+		bool hostel;// общага
+		char direction[255];// направление
+	}; 
+	
+	char userName[255];
 	/*
 	scanf("%d %d", &i, &j);
 	input(arr, &i, &j);
 	outPut(arr, &i, &j);\
 	*/
 
+
 	printf("   _____    ______   ___       _   __   __ __    ____   _   __   ____   ____ \n");
 	printf("  / ___/   /_  __/  /   |     / | / /  / //_/   /  _/  / | / /  / __ \\ / __ )\n");
 	printf("  \\__ \\     / /    / /| |    /  |/ /  / ,<      / /   /  |/ /  / / / // __  |\n");
 	printf(" ___/ /    / /    / ___ |   / /|  /  / /| |   _/ /   / /|  /  / /_/ // /_/ / \n");
-	printf("/____/    /_/    /_/  |_|  /_/ |_/  /_/ |_|  /___/  /_/ |_/  /_____//_____/  \n");
-	printf("Hello, enter your name and the database will be loaded automatically,\n if you do not want this, then enter a new name to create an empty database");
-
+	printf("/____/    /_/    /_/  |_|  /_/ |_/  /_/ |_|  /___/  /_/ |_/  /_____//_____/  \n\n\n");
+	printf("Hello, enter your name and the database will be loaded automatically,\n if you do not want this, then enter a new name to create an empty database\n");
+	
+	scanf("%255[^\n]", userName);
 
 
 }
 
 
+// TODO: Создать структуру с полями и создание файла 
