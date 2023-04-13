@@ -131,8 +131,10 @@
     <ClCompile Include="app.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="5.txt" />
-    <Text Include="rez.txt" />
+    <ClInclude Include="app.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="UserData.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
