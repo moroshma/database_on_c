@@ -10,12 +10,7 @@
 
 //typedef struct students students;
 
-typedef struct  {
-	char  name[255];
-	char lastName[255];
-	int age;
-	char direction[255];// направление
-} students;
+
 
 
 void main() {
@@ -61,14 +56,11 @@ void main() {
 			{
 			case 1:
 				newStudent(STU, &lastSTU);
-				//printf("%d", STU[0].age);
 				printf("students add press any key to return\n");
-				
-				//scanf("%s", &s);
 				_getch();
 				break;
 			case 2:
-
+				loadFromFile(STU, &lastSTU, userName);
 				break;
 			default:
 				break;
@@ -90,7 +82,7 @@ void main() {
 				_getch();
 				break;
 			case 2:
-
+				loadToFile(STU, &lastSTU, userName);
 				break;
 
 			default:
@@ -122,8 +114,8 @@ bool newUserVerification(FILE* file, char* user) {
 	while (fgets(buffer, 255, file) != NULL)
 	{
 		if (strcmp(buffer, concat(user, "\n")) == 0) {
-			printf("Welcome back %s enjoy our product!\n", user);
-
+			printf("Welcome back %s enjoy our product!\n press any key", user);
+			_getch();
 			return true;
 		}
 		
@@ -141,7 +133,8 @@ bool newUserVerification(FILE* file, char* user) {
 
 		fclose(append);
 		fclose(dtUser);	
-		printf("We are glad that you have decided to use our product.\n");
+		printf("We are glad that you have decided to use our product.\n press any key");
+		_getch();
 
 		return FALSE;
 }
@@ -178,7 +171,7 @@ void printAllStu(students* STU, int* lastSTU) {
 
 
 	printf("*-------------------------------------------------------*\n");
-	printf("|Sn |   Name     |Last name   |   age      |Direction   |\n");
+	printf("|Sn |   Name     |Last name   |   Age      |Direction   |\n");
 	printf("|-- | ---------- | ---------- | ---------- | ---------- |\n");
 
 	for (int i = 0; i < *lastSTU + 1; i++) {
@@ -222,5 +215,74 @@ void newStudent(students* st, int* last) {
 	
 
 }
+
+
+void loadToFile(students* STU, int* lastSTU, char * username) {
+
+
+	char* tDataUserName = concat(concat("UserData", username), ".txt");
+	FILE* append = fopen(tDataUserName, "w");
+
+	for (int i = 0; i <= *lastSTU; i++) {
+		fprintf(append, "%s;", STU[i].name);
+		fprintf(append, "%s;", STU[i].lastName);
+		fprintf(append, "%d;", STU[i].age);
+		fprintf(append, "%s\n", STU[i].direction);
+	}
+	
+	fclose(append);
+}
+
+
+void loadFromFile(students* STU, int* lastSTU, char* username) {
+
+
+	char* tDataUserName = concat(concat("UserData", username), ".txt");
+	FILE* append = fopen(tDataUserName, "r");
+	char buffer[255];
+	char* newArr[4][255];
+	*lastSTU = -1;
+
+	
+
+	while (fgets(buffer, 255, append) != NULL)
+	{
+		*lastSTU = *lastSTU + 1;
+		parseData(buffer, newArr);
+		//strncpy(STU[*lastSTU].name, newArr[0], 255);
+		//strncpy(STU[*lastSTU].lastName, newArr[1], 255);
+		//strncpy(STU[*lastSTU].age, newArr[2], 255);
+		//strncpy(STU[*lastSTU].direction, newArr[3], 255);
+
+			 
+	}
+
+	fclose(append);
+}
+
+
+
+void parseData(char* data, char* name ) {
+	char* tSt[255];
+	int count = 0;
+	int j = 0;
+
+
+	for (int i = 0; i < strlen(data); i++) {
+
+		if (data[i] != ';' && data[i] != '\n') {
+			j++;
+		}
+
+		else {
+			printf("%s", tSt);
+			j = 0;
+			count++;
+		}
+
+	}
+
+}
+
 
 // TODO: Создать структуру с полями и создание файла нужен файл по типу user 
