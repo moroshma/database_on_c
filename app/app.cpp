@@ -43,7 +43,7 @@ void main() {
 	while (1) {
 		system("cls");
 		printLogo();
-		printf("\n select the desired item:\n 1. entering user data\n 2. print students\n");
+		printf("\n select the desired item:\n 1. entering user data\n 2. print students\n 3. sort arr\n");
 		scanf("%d", &n);
 		switch (n)
 		{
@@ -83,12 +83,42 @@ void main() {
 				break;
 			case 2:
 				loadToFile(STU, &lastSTU, userName);
+				_getch();
 				break;
 
 			default:
 				break;
 			}
 			break;
+		case 3:
+
+			system("cls");
+			printLogo();
+			printf("\n select the desired item:\n 1.ascending sort \n 2. descending sort\n");
+			scanf("%d", &n);
+
+			switch (n)
+			{
+			case 1:
+				system("cls");
+				printLogo();
+				printf("\n select the desired item:\n 1.sort name \n 2.sort last name\n 3. sort age\n 4. sort direction\n");
+				scanf("%d", &n);
+				sortAscending(STU, &n, &lastSTU);
+				break;
+			case 2:
+
+				system("cls");
+				printLogo();
+				printf("\n select the desired item:\n 1.sort name \n 2.sort last name\n 3. sort age\n 4. sort direction\n");
+				scanf("%d", &n);
+				descendingAscending(STU, &n, &lastSTU);
+				break;
+			default:
+				break;
+			}
+			break;
+
 
 		default:
 			printf("Invalid data, try again\n press any key: ");
@@ -110,7 +140,6 @@ bool newUserVerification(FILE* file, char* user) {
 	char name[255];
 	char buffer[255];
 
-	
 	while (fgets(buffer, 255, file) != NULL)
 	{
 		if (strcmp(buffer, concat(user, "\n")) == 0) {
@@ -248,13 +277,7 @@ void loadFromFile(students* STU, int* lastSTU, char* username) {
 	while (fgets(buffer, 255, append) != NULL)
 	{
 		*lastSTU = *lastSTU + 1;
-		parseData(buffer, newArr);
-		//strncpy(STU[*lastSTU].name, newArr[0], 255);
-		//strncpy(STU[*lastSTU].lastName, newArr[1], 255);
-		//strncpy(STU[*lastSTU].age, newArr[2], 255);
-		//strncpy(STU[*lastSTU].direction, newArr[3], 255);
-
-			 
+		parseData(buffer, STU, lastSTU);	 
 	}
 
 	fclose(append);
@@ -262,27 +285,146 @@ void loadFromFile(students* STU, int* lastSTU, char* username) {
 
 
 
-void parseData(char* data, char* name ) {
-	char* tSt[255];
+void parseData(char* datauser, students* STU, int* size) {
+
+	int flag = 0;
 	int count = 0;
-	int j = 0;
+	char agechar[10];
 
-
-	for (int i = 0; i < strlen(data); i++) {
-
-		if (data[i] != ';' && data[i] != '\n') {
-			j++;
+	for (int j = 0; j < 255; j++) {
+		if (datauser[j] == '\n' || datauser[j] == '\0') {
+			STU[*size].direction[count] = '\0';
+			break;
 		}
-
-		else {
-			printf("%s", tSt);
-			j = 0;
+		if (datauser[j] == ';') {
+			switch (flag)
+			{
+			case 0:
+				STU[*size].name[count] = '\0';
+				break;
+			case 1:
+				STU[*size].lastName[count] = '\0';
+				break;
+			case 2:
+				agechar[count] = '\0';
+				STU[*size].age = atoi(agechar);
+			}
+			flag++;
+			count = 0;
+			continue;
+		}
+		switch (flag) {
+		case 0: {
+			STU[*size].name[count] = datauser[j];
 			count++;
+			break;
 		}
+		case 1: {
+			STU[*size].lastName[count] = datauser[j];
+			count++;
+			break;
+		}
+		case 2: {
+			if (datauser[j] != ' ') {
+				agechar[count] = datauser[j];
+				count++;
+			}
+			break;
+		}
+		case 3: {
+			STU[*size].direction[count] = datauser[j];
+			count++;
+			break;
+		}
+		}
+	}
+}
 
+
+// TODO: Создать структуру с полями и создание файла нужен файл по типу user 
+
+int nameCmpUp(const void* a, const void* b) {
+	return strcmp(((students*)a)->name, ((students*)b)->name);
+}
+int nameCmpDown(const void* a, const void* b) {
+	return strcmp(((students*)b)->name, ((students*)a)->name);
+}
+
+
+int lastNameCmpUp(const void* a, const void* b) {
+	return strcmp(((students*)a)->lastName, ((students*)b)->lastName);
+}
+int lastNameCmpDown(const void* a, const void* b) {
+	return strcmp(((students*)b)->lastName, ((students*)a)->lastName);
+}
+
+
+int directionCmpUp(const void* a, const void* b) {
+	return strcmp(((students*)a)->direction, ((students*)b)->direction);
+}
+int directionCmpDown(const void* a, const void* b) {
+	return strcmp(((students*)b)->direction, ((students*)a)->direction);
+}
+
+
+int ageCmpUp(const void* a, const void* b) {
+	return ((students*)a)->age - ((students*)b)->age;
+}
+int ageCmpDown(const void* a, const void* b) {
+	return ((students*)b)->age - ((students*)a)->age;
+}
+
+
+
+void sortAscending(students* STU, int* n, int * lastSTU) {
+
+	switch(*n)
+	{
+	case 1:
+		qsort(STU, *lastSTU + 1, sizeof(students), nameCmpUp);
+	break;
+
+	case 2:
+		qsort(STU, *lastSTU + 1, sizeof(students), lastNameCmpUp);
+	break;
+	case 3:
+		qsort(STU, *lastSTU + 1, sizeof(students), ageCmpUp);
+
+	break;
+	case 4:
+		qsort(STU, *lastSTU + 1, sizeof(students), directionCmpUp);
+
+	break;
+
+	default:
+		break;
 	}
 
 }
 
 
-// TODO: Создать структуру с полями и создание файла нужен файл по типу user 
+void descendingAscending(students* STU, int* n, int* lastSTU) {
+
+	switch (*n)
+	{
+	case 1:
+		qsort(STU, *lastSTU + 1, sizeof(students), nameCmpDown);
+		break;
+
+	case 2:
+		qsort(STU, *lastSTU + 1, sizeof(students), lastNameCmpDown);
+		break;
+	case 3:
+		qsort(STU, *lastSTU + 1, sizeof(students), ageCmpDown);
+
+		break;
+	case 4:
+		qsort(STU, *lastSTU + 1, sizeof(students), directionCmpDown);
+
+		break;
+
+	default:
+		break;
+	}
+
+}

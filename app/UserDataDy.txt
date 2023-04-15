@@ -1,1 +1,2 @@
-jony;cash;90;ivt
+jony;sda;3;r
+a;b;2;4

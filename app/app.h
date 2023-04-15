@@ -20,4 +20,8 @@ void loadToFile( students* STU, int* lastSTU, char* username);
 
 void loadFromFile(struct students* STU, int* lastSTU, char* username);
 
+void sortAscending(struct students* STU, int* n);
+
 void parseData(char* data, char* newArr);
+
+void descendingAscending(students* STU, int* n, int* lastSTU);
