@@ -1,10 +1,9 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
-
 #include <stdio.h>
 #include <stdbool.h>
 #include <windows.h>
 #include "app.h"
-#include < string.h >
+#include <string.h >
 #include <conio.h>
 #include <ctype.h>
 
@@ -43,14 +42,14 @@ void main() {
 	while (1) {
 		system("cls");
 		printLogo();
-		printf("\n select the desired item:\n 1. entering user data\n 2. print students\n 3. sort arr\n");
+		printf("\n select the desired item:\n 1. entering user data\n 2. print students\n 3. sort arr\n 4. serch \n 5. delite elem\n 7. exit\n");
 		scanf("%d", &n);
 		switch (n)
 		{
 		case 1:
 			system("cls");
 			printLogo();
-			printf("\n select the desired item:\n 1. console input\n 2. load from file input\n");
+			printf("\n select the desired item:\n 1. console input\n 2. load from file input\n 3.exit.\n");
 			scanf("%d", &n);
 			switch (n)
 			{
@@ -62,7 +61,13 @@ void main() {
 			case 2:
 				loadFromFile(STU, &lastSTU, userName);
 				break;
+
+			case 3:
+
+				break;
 			default:
+				printf("Invalid data, try again\n press any key: ");
+				_getch();
 				break;
 			}
 			break;
@@ -72,7 +77,7 @@ void main() {
 		case 2:
 			system("cls");
 			printLogo();
-			printf("\n select the desired item:\n 1. console output\n 2. file output\n");
+			printf("\n select the desired item:\n 1. console output\n 2. file output\n 3. exit.\n");
 			scanf("%d", &n);
 
 			switch (n)
@@ -85,8 +90,12 @@ void main() {
 				loadToFile(STU, &lastSTU, userName);
 				_getch();
 				break;
+			case 3:
+				break;
 
 			default:
+				printf("Invalid data, try again\n press any key: ");
+				_getch();
 				break;
 			}
 			break;
@@ -94,7 +103,7 @@ void main() {
 
 			system("cls");
 			printLogo();
-			printf("\n select the desired item:\n 1.ascending sort \n 2. descending sort\n");
+			printf("\n select the desired item:\n 1.ascending sort \n 2. descending sort\n3. exit.\n");
 			scanf("%d", &n);
 
 			switch (n)
@@ -102,23 +111,48 @@ void main() {
 			case 1:
 				system("cls");
 				printLogo();
-				printf("\n select the desired item:\n 1.sort name \n 2.sort last name\n 3. sort age\n 4. sort direction\n");
+				printf("\n select the desired item:\n 1.sort name \n 2.sort last name\n 3. sort age\n 4. sort direction\n 5. exit.\n");
 				scanf("%d", &n);
+				if (n == 5)
+					break;
 				sortAscending(STU, &n, &lastSTU);
 				break;
 			case 2:
 
 				system("cls");
 				printLogo();
-				printf("\n select the desired item:\n 1.sort name \n 2.sort last name\n 3. sort age\n 4. sort direction\n");
+				printf("\n select the desired item:\n 1.sort name \n 2.sort last name\n 3. sort age\n 4. sort direction\n 5. exit.\n");
 				scanf("%d", &n);
+
+				if (n == 5)
+					break;
+
 				descendingAscending(STU, &n, &lastSTU);
 				break;
+
+			case 3:
+				break;
 			default:
+				printf("Invalid data, try again\n press any key: ");
+				_getch();
 				break;
 			}
 			break;
+		case 4:
+			system("cls");
+			printLogo();
+			sercInData(STU, &lastSTU,1);
+			break;
+		case 5:
+			system("cls");
+			printLogo();
+			sercInData(STU, &lastSTU, 0); //mode 0 - delite mode 1- serch 
+			break;
 
+		case 7:
+			printf("Have a good time <3\n Press any key: ");
+			_getch();
+			exit(1);
 
 		default:
 			printf("Invalid data, try again\n press any key: ");
@@ -211,6 +245,27 @@ void printAllStu(students* STU, int* lastSTU) {
 	if (i != *lastSTU)
 		printf("|-- | ---------- | ---------- | ---------- | ---------- |\n");
 			
+	}
+	printf("*-------------------------------------------------------*\n");
+
+
+
+
+}
+
+void printAllStuSpecial(students* STU, int* lastSTU, int* indexArr, int* lastIndex) {
+
+
+	printf("*-------------------------------------------------------*\n");
+	printf("|Sn |   Name     |Last name   |   Age      |Direction   |\n");
+	printf("|-- | ---------- | ---------- | ---------- | ---------- |\n");
+
+	for (int i = 0; i < *lastIndex + 1; i++) {
+
+		printf("|%-3d|%-12s|%-12s|   %-9d|%-12s|\n", i + 1, STU[indexArr[i]].name, STU[indexArr[i]].lastName, STU[indexArr[i]].age, STU[indexArr[i]].direction);
+		if (i != *lastSTU)
+			printf("|-- | ---------- | ---------- | ---------- | ---------- |\n");
+
 	}
 	printf("*-------------------------------------------------------*\n");
 
@@ -341,7 +396,7 @@ void parseData(char* datauser, students* STU, int* size) {
 }
 
 
-// TODO: Создать структуру с полями и создание файла нужен файл по типу user 
+
 
 int nameCmpUp(const void* a, const void* b) {
 	return strcmp(((students*)a)->name, ((students*)b)->name);
@@ -376,8 +431,63 @@ int ageCmpDown(const void* a, const void* b) {
 
 
 
-void sortAscending(students* STU, int* n, int * lastSTU) {
+void serchStruct(students* STU, int* lastIndex, int* indexArr, int* lastIndexInResult, void * elem, int* num) {
 
+	switch (*num)
+	{
+	case 1:
+		for (int i = 0; i < *lastIndex + 1; i++) {
+			if (strcmp(STU[i].name, (char*)elem) == 0) {
+				*lastIndexInResult = *lastIndexInResult + 1;
+				indexArr[*lastIndexInResult] = i;
+			}
+		}
+
+		break;
+	case 2:
+		for (int i = 0; i < *lastIndex + 1; i++) {
+			if (strcmp(STU[i].lastName, (char*)elem) == 0) {
+				*lastIndexInResult = *lastIndexInResult + 1;
+				indexArr[*lastIndexInResult] = i;
+			}
+		}
+
+		break;
+	case 3:
+		for (int i = 0; i < *lastIndex + 1; i++) {
+			if (STU[i].age == atoi((char*)elem)) {
+				*lastIndexInResult = *lastIndexInResult + 1;
+				indexArr[*lastIndexInResult] = i;
+		
+			}
+		}
+
+		break;
+	case 4: 
+		for (int i = 0; i < *lastIndex + 1; i++) {
+			if (strcmp(STU[i].direction, (char*)elem) == 0) {
+				*lastIndexInResult = *lastIndexInResult + 1;
+				indexArr[*lastIndexInResult] = i;
+		
+			}
+		}
+
+		break;
+	default:
+
+		*lastIndexInResult = -1;
+		break;
+	}
+	
+
+}
+
+
+
+void sortAscending(students* STU, int* n, int * lastSTU) {
+	if (*lastSTU == -1) {
+		printf("Hmm, it looks like there is no data in the database\nyou can enter them or load them from a file\n press any key");
+	}
 	switch(*n)
 	{
 	case 1:
@@ -395,6 +505,9 @@ void sortAscending(students* STU, int* n, int * lastSTU) {
 		qsort(STU, *lastSTU + 1, sizeof(students), directionCmpUp);
 
 	break;
+
+	case 5:
+		break;
 
 	default:
 		break;
@@ -423,8 +536,66 @@ void descendingAscending(students* STU, int* n, int* lastSTU) {
 
 		break;
 
+	case 5:
+		break;
 	default:
 		break;
 	}
 
 }
+
+
+
+void sercInData(students* STU, int* lastSTU, int  mode) {
+	if (mode == 1) {
+		printf("\nselect the desired item serch in:\n 1.find name \n 2.find last name\n 3. find age\n 4. find direction\n 5. exit.\n");
+	}else 
+		printf("\nselect the desired item delite in:\n 1.find name \n 2.find last name\n 3. find age\n 4. find direction\n 5. exit.\n");
+
+	int n;
+	char find[255];
+	scanf("%d", &n);
+	
+	
+	int indexArr[255];
+	int lastIndenInArr = -1;
+	if (n >= 1 && n <= 4) {
+		printf("\ninput elem:\n");
+		scanf("%s", find);
+
+		serchStruct(STU, lastSTU, indexArr, &lastIndenInArr, find, &n);
+
+		if (lastIndenInArr == -1)
+			printf("Invalid data\n try again\n");
+		else {
+			system("cls");
+			printLogo();
+			if (mode == 1)
+				printAllStuSpecial(STU, lastSTU, indexArr, &lastIndenInArr);
+			else
+				deliteData(STU, lastSTU, indexArr, &lastIndenInArr);
+		}
+	}
+	printAllStu(STU, lastSTU);
+	printf("\nCompleted successfully\npress any key: \n");
+	_getch();
+}
+
+void deliteData(students *STU, int * lastSTU, int * indexArr, int *lastIndenInArr) {
+	for (int i = 0; i <= *lastIndenInArr; i++) {
+		shiftArr(STU, lastSTU, &i);
+		*lastSTU = *lastSTU - 1;
+	}
+}
+
+void shiftArr(students* STU, int* lastSTU, int * startIndex) {
+	for (int i = *startIndex; i < *lastSTU - 1; i++) {
+
+		students tST = STU[i];
+		STU[i] = STU[i + 1];
+		STU[i + 1] = tST;
+	}
+}
+
+// TODO: Создать структуру с полями и создание файла нужен файл по типу user 
+// TODO: С учётом регистра и без
