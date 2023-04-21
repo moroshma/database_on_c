@@ -16,6 +16,10 @@ void printAllStu( students* STU, int* lastSTU);
 
 void printAllStuSpecial(students* STU, int* lastSTU, int* indexArr, int* lastIndex);
 
+void printSTUid(students STU, int* lastSTU, int* indexArr);
+
+void printAllStuSpecial(students STU, int* lastSTU, int* indexArr, int* lastIndex);
+
 void newStudent( students* st, int* last);
 
 void loadToFile( students* STU, int* lastSTU, char* username);
@@ -26,11 +30,21 @@ void sortAscending(struct students* STU, int* n);
 
 void parseData(char* data, char* newArr);
 
+void serchStruct(students* STU, int* lastIndex, int* indexArr, int* lastIndexInResult, void* elem, int* num);
+
+void sercInData(students* STU, int* lastSTU, int mode);
+
 void descendingAscending(students* STU, int* n, int* lastSTU);
+
+
 
 void deliteData(students* STU, int* lastSTU, int* indexArr, int* lastIndenInArr);
 
 void shiftArr(students* STU, int* lastSTU, int* startIndex);
+
+bool allLetters(char* s);
+
+bool allDigit(char* s);
 
 void sercInData(students* , int* );
 
