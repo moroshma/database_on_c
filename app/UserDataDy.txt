@@ -1,3 +1,3 @@
-Jony;cash;242;IVT
-Ben;Benis;2342;TRS
+Ben;Benis;35;TRS
+Jony;cash;20;IVT
 Kostya;Myxamorov;19;IVT

